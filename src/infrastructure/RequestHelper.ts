@@ -1,4 +1,3 @@
-import Request from 'got';
 import { decamelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 import { PaginatedRequestOptions, BaseRequestOptions, DefaultRequestOptions } from '@typings';
@@ -6,7 +5,11 @@ import { PaginatedRequestOptions, BaseRequestOptions, DefaultRequestOptions } fr
 function defaultRequest(service, endpoint: string, { body, query, sudo }: DefaultRequestOptions) {
   return [
     endpoint,
-    {
+    { 
+      retry: {
+        retries: 4,
+        status: 429
+      },
       baseUrl: service.url,
       headers: { sudo, ...service.headers },
       query: query && stringify(decamelizeKeys(query), { arrayFormat: 'bracket' }),
@@ -25,7 +28,7 @@ class RequestHelper {
       sudo,
     });
 
-    const { headers, body } = await Request.get(...requestOptions);
+    const { headers, body } = await service.requester.get(...requestOptions);
     const pagination = {
       total: headers['x-total'],
       next: headers['x-next-page'] || null,
@@ -52,7 +55,7 @@ class RequestHelper {
   }
 
   static async stream(service, endpoint: string, options: BaseRequestOptions = ({} = {})) {
-    return Request.stream(
+    return service.requester.stream(
       ...defaultRequest(service, endpoint, {
         query: options,
       }),
@@ -61,7 +64,7 @@ class RequestHelper {
 
   static async post(service, endpoint: string, options: BaseRequestOptions = {}) {
     const { sudo, ...body } = options;
-    const response = await Request.post(
+    const response = await service.requester.post(
       ...defaultRequest(service, endpoint, {
         body,
         sudo,
@@ -73,7 +76,7 @@ class RequestHelper {
 
   static async put(service, endpoint: string, options: BaseRequestOptions = {}) {
     const { sudo, ...body } = options;
-    const response = await Request.put(
+    const response = await service.requester.put(
       ...defaultRequest(service, endpoint, {
         body,
       }),
@@ -84,7 +87,7 @@ class RequestHelper {
 
   static async delete(service, endpoint: string, options: BaseRequestOptions = {}) {
     const { sudo, ...query } = options;
-    const response = await Request.delete(
+    const response = await service.requester.delete(
       ...defaultRequest(service, endpoint, {
         query,
       }),

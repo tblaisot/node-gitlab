@@ -1,5 +1,5 @@
 declare global {
-  function encodeURIComponent(uriComponent: string | number | boolean): string; 
+  function encodeURIComponent(uriComponent: string | number | boolean): string;
 }
 
 export type ResourceType = string;
@@ -27,7 +27,7 @@ export type MergeRequestId = number;
 export type MilestoneId = number;
 export type NoteId = number;
 export type PipelineId = number;
-export type PipelineScheduleId = number
+export type PipelineScheduleId = number;
 export type ProjectId = string | number;
 export type RunnerId = number;
 export type SnippetId = number;
@@ -53,7 +53,6 @@ export interface Bundle<T extends { [name: string]: Constructor }, P extends key
   new (options?: any): Mapper<T, P>;
 }
 
-
 // Base Service
 export interface BaseServiceOptions extends Sudo {
   oauthToken?: string;
@@ -62,6 +61,13 @@ export interface BaseServiceOptions extends Sudo {
   url?: string;
   version?: string;
   rejectUnauthorized?: boolean;
+  requester?: {
+    get: Function;
+    post: Function;
+    put: Function;
+    delete: Function;
+    stream: Function;
+  };
 }
 
 // RequestHelper
@@ -83,8 +89,8 @@ export interface PaginatedRequestOptions extends BaseRequestOptions {
 
 // Access Requests
 export enum AccessLevel {
-  GUEST= 10,
-  REPORTER= 20,
+  GUEST = 10,
+  REPORTER = 20,
   DEVELOPER = 30,
   MAINTAINER = 40,
   OWNER = 50,
@@ -118,7 +124,7 @@ export type EventAction =
   | 'joined'
   | 'left'
   | 'destroyed'
-  | 'expired'
+  | 'expired';
 
 export type EventTarget =
   | 'issue'
@@ -127,11 +133,11 @@ export type EventTarget =
   | 'note'
   | 'project'
   | 'snippet'
-  | 'user'
+  | 'user';
 
 export interface EventOptions {
-  action?: EventAction,
-  targetType?: EventTarget
+  action?: EventAction;
+  targetType?: EventTarget;
 }
 
 // Jobs
@@ -143,7 +149,7 @@ export type JobScope =
   | 'success'
   | 'canceled'
   | 'skipped'
-  | 'manual'
+  | 'manual';
 
 // Notification Settings Levels
 export type NotificationSettingLevel =
@@ -152,7 +158,7 @@ export type NotificationSettingLevel =
   | 'watch'
   | 'global'
   | 'mention'
-  | 'custom'
+  | 'custom';
 
 // Services
 export type SupportedService =
@@ -190,7 +196,7 @@ export type SupportedService =
   | 'mock-ci';
 
 // Snippets
-export type SnippetVisibility = 'private' | 'public' | 'internal'
+export type SnippetVisibility = 'private' | 'public' | 'internal';
 
 // User Impersonation Tokens
-export type ImpersonationTokenScope = 'api' | 'read_user'
+export type ImpersonationTokenScope = 'api' | 'read_user';

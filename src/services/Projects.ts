@@ -23,7 +23,7 @@ class Projects extends BaseService {
     return RequestHelper.post(this, `projects/${pId}/archive`, options);
   }
 
-  create({ userId, ...options }: { userId: UserId } & BaseRequestOptions) {
+  create({ userId, ...options }: { userId?: UserId } & BaseRequestOptions) {
     const url = userId ? `projects/user/${encodeURIComponent(userId)}` : 'projects';
 
     return RequestHelper.post(this, url, options);
@@ -68,7 +68,7 @@ class Projects extends BaseService {
   remove(projectId: ProjectId, options?: Sudo) {
     const pId = encodeURIComponent(projectId);
 
-    return RequestHelper.delete(this, `projects/${pId}`, options);
+    return RequestHelper.del(this, `projects/${pId}`, options);
   }
 
   search(projectName: string) {
@@ -113,7 +113,7 @@ class Projects extends BaseService {
   unshare(projectId: ProjectId, groupId: GroupId, options?: Sudo) {
     const [pId, gId] = [projectId, groupId].map(encodeURIComponent);
 
-    return RequestHelper.delete(this, `projects/${pId}/share${gId}`, options);
+    return RequestHelper.del(this, `projects/${pId}/share${gId}`, options);
   }
 
   unstar(projectId: ProjectId, options?: Sudo) {

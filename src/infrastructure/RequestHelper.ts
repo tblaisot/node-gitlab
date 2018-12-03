@@ -20,7 +20,7 @@ function defaultRequest(service, endpoint: string, { body, query, sudo }: Defaul
   ];
 }
 
-class RequestHelper {
+export class RequestHelper {
   static async get(service, endpoint: string, options: PaginatedRequestOptions = {}) {
     const { showPagination, maxPages, sudo, ...query } = options;
     const requestOptions = defaultRequest(service, endpoint, {
@@ -96,5 +96,3 @@ class RequestHelper {
     return response.body;
   }
 }
-
-export default RequestHelper;
